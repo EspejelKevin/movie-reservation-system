@@ -6,15 +6,19 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type Routes struct {
+type Router struct {
 	registerUser *auth.RegisterUserUseCase
 }
 
-func (routes *Routes) RegisterRoutes(engine *gin.Engine) {
+func NewRouter(registerUser *auth.RegisterUserUseCase) *Router {
+	return &Router{registerUser}
+}
+
+func (router *Router) RegisterRoutes(engine *gin.Engine) {
 	users := engine.Group("/api/v1")
 	{
 		users.POST("/login", func(ctx *gin.Context) {})
-		users.POST("/signup", routes.registerUser.Execute)
+		users.POST("/signup", router.registerUser.Execute)
 	}
 
 	roles := engine.Group("/api/v1")

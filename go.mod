@@ -5,6 +5,11 @@ go 1.26.1
 require github.com/gin-gonic/gin v1.12.0
 
 require (
+	github.com/mattn/go-sqlite3 v1.14.22 // indirect
+	gorm.io/driver/sqlite v1.6.0 // indirect
+)
+
+require (
 	github.com/BurntSushi/toml v1.3.2 // indirect
 	github.com/alicanli1995/conform v1.1.1 // indirect
 	github.com/bytedance/gopkg v0.1.3 // indirect
@@ -19,6 +24,7 @@ require (
 	github.com/go-playground/validator/v10 v10.30.3 // indirect
 	github.com/goccy/go-json v0.10.5 // indirect
 	github.com/goccy/go-yaml v1.19.2 // indirect
+	github.com/google/wire v0.7.0
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.5 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
