@@ -16,14 +16,12 @@ func NewUserRepositoryGorm(connection *database.Connection) *UserRepositoryGorm 
 	return &UserRepositoryGorm{connection}
 }
 
-func (repository *UserRepositoryGorm) Save(user entities.User) error {
-	ctx := context.Background()
+func (repository *UserRepositoryGorm) Save(ctx context.Context, user entities.User) error {
 	db := repository.connection.GetDB()
 	return gorm.G[entities.User](db).Create(ctx, &user)
 }
 
-func (repository *UserRepositoryGorm) GetUserByEmail(email string) (entities.User, error) {
-	ctx := context.Background()
+func (repository *UserRepositoryGorm) GetUserByEmail(ctx context.Context, email string) (entities.User, error) {
 	db := repository.connection.GetDB()
 	return gorm.G[entities.User](db).Where("email = ?", email).First(ctx)
 }

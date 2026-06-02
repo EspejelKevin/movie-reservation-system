@@ -1,8 +1,11 @@
 package interfaces
 
-import "movie-reservation-system/src/domain/entities"
+import (
+	"context"
+	"movie-reservation-system/src/domain/entities"
+)
 
 type UserRepository interface {
-	Save(user entities.User) error
-	GetUserByEmail(email string) (entities.User, error)
+	Save(ctx context.Context, user entities.User) error
+	GetUserByEmail(ctx context.Context, email string) (entities.User, error)
 }

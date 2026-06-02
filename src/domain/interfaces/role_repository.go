@@ -1,11 +1,14 @@
 package interfaces
 
-import "movie-reservation-system/src/domain/entities"
+import (
+	"context"
+	"movie-reservation-system/src/domain/entities"
+)
 
 type RoleRepository interface {
-	Save(role entities.Role) error
-	GetRoleByName(name string) (entities.Role, error)
-	GetRoleByID(id uint) (entities.Role, error)
-	Update(id uint, name string) (int, error)
-	Delete(id uint) (int, error)
+	Save(ctx context.Context, role entities.Role) error
+	GetRoleByName(ctx context.Context, name string) (entities.Role, error)
+	GetRoleByID(ctx context.Context, id uint) (entities.Role, error)
+	Update(ctx context.Context, id uint, name string) (int, error)
+	Delete(ctx context.Context, id uint) (int, error)
 }
