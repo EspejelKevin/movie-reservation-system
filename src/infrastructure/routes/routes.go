@@ -1,12 +1,20 @@
 package routes
 
-import "github.com/gin-gonic/gin"
+import (
+	"movie-reservation-system/src/application/usecases/auth"
 
-func RegisterRoutes(engine *gin.Engine) {
+	"github.com/gin-gonic/gin"
+)
+
+type Routes struct {
+	registerUser *auth.RegisterUserUseCase
+}
+
+func (routes *Routes) RegisterRoutes(engine *gin.Engine) {
 	users := engine.Group("/api/v1")
 	{
 		users.POST("/login", func(ctx *gin.Context) {})
-		users.POST("/signup", func(ctx *gin.Context) {})
+		users.POST("/signup", routes.registerUser.Execute)
 	}
 
 	roles := engine.Group("/api/v1")
