@@ -9,6 +9,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
+	"gorm.io/gorm"
 )
 
 type RegisterUserUseCase struct {
@@ -36,9 +37,10 @@ func (usecase *RegisterUserUseCase) Execute(ctx *gin.Context) {
 		return
 	}
 
-	userDB, err := usecase.repository.GetUserByEmail(ctx.Request.Context(), userDTO.Email)
+	userDB, err := usecase.repository.GetUserByEmailOrUserName(ctx.Request.Context(),
+		userDTO.Email, userDTO.UserName)
 
-	if err != nil {
+	if err != gorm.ErrRecordNotFound && err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
@@ -52,7 +54,7 @@ func (usecase *RegisterUserUseCase) Execute(ctx *gin.Context) {
 		Name:     userDTO.Name,
 		UserName: userDTO.UserName,
 		Email:    userDTO.Email,
-		Password: userDTO.Password,
+		Password: userDTO.HashPassword(),
 		RoleID:   uint(roleID),
 	}
 
