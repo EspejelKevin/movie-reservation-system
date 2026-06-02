@@ -3,11 +3,12 @@ package main
 import (
 	"log"
 	"movie-reservation-system/src/application/usecases/auth"
+	"movie-reservation-system/src/domain/entities"
 	"movie-reservation-system/src/domain/settings"
 	"movie-reservation-system/src/domain/validators"
 	"movie-reservation-system/src/infrastructure/database"
 	"movie-reservation-system/src/infrastructure/repositories"
-	routes "movie-reservation-system/src/infrastructure/router"
+	"movie-reservation-system/src/infrastructure/routes"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
@@ -27,6 +28,9 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	db := connection.GetDB()
+	db.AutoMigrate(&entities.User{}, &entities.Role{})
 
 	userRepository := repositories.NewUserRepositoryGorm(connection)
 
