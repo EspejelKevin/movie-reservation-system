@@ -7,5 +7,5 @@ import (
 
 type UserRepository interface {
 	Save(ctx context.Context, user entities.User) error
-	GetUserByEmail(ctx context.Context, email string) (entities.User, error)
+	GetUserByEmailOrUserName(ctx context.Context, email string, username string) (entities.User, error)
 }

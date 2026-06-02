@@ -21,7 +21,9 @@ func (repository *UserRepositoryGorm) Save(ctx context.Context, user entities.Us
 	return gorm.G[entities.User](db).Create(ctx, &user)
 }
 
-func (repository *UserRepositoryGorm) GetUserByEmail(ctx context.Context, email string) (entities.User, error) {
+func (repository *UserRepositoryGorm) GetUserByEmailOrUserName(ctx context.Context, email string,
+	username string) (entities.User, error) {
+
 	db := repository.connection.GetDB()
-	return gorm.G[entities.User](db).Where("email = ?", email).First(ctx)
+	return gorm.G[entities.User](db).Where("email = ?", email).Or("username = ?", username).First(ctx)
 }
