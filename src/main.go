@@ -4,10 +4,12 @@ import (
 	"log"
 	"movie-reservation-system/src/application/usecases/admin"
 	"movie-reservation-system/src/application/usecases/auth"
+	"movie-reservation-system/src/application/usecases/role"
 	"movie-reservation-system/src/domain/entities"
 	"movie-reservation-system/src/domain/settings"
 	"movie-reservation-system/src/domain/validators"
 	"movie-reservation-system/src/infrastructure/database"
+	"movie-reservation-system/src/infrastructure/middlewares"
 	"movie-reservation-system/src/infrastructure/repositories"
 	"movie-reservation-system/src/infrastructure/routes"
 
@@ -34,6 +36,7 @@ func main() {
 	db.AutoMigrate(&entities.User{}, &entities.Role{})
 
 	userRepository := repositories.NewUserRepositoryGorm(connection)
+	roleRepository := repositories.NewRoleRepositoryGorm(connection)
 
 	validate := validator.New()
 	validate.RegisterValidation("password", validators.ValidatePassword)
@@ -43,7 +46,11 @@ func main() {
 
 	loginAdmin := admin.NewLoginAdminUseCase(userRepository, settings, validate)
 
-	router := routes.NewRouter(registerUser, loginUser, loginAdmin)
+	getRoles := role.NewGetRolesUseCase(roleRepository)
+
+	middlewares := middlewares.NewMiddlewares(settings)
+
+	router := routes.NewRouter(registerUser, loginUser, loginAdmin, getRoles, middlewares)
 	engine := gin.Default()
 	router.RegisterRoutes(engine)
 
