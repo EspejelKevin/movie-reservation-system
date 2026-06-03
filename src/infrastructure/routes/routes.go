@@ -8,16 +8,17 @@ import (
 
 type Router struct {
 	registerUser *auth.RegisterUserUseCase
+	loginUser    *auth.LoginUserUseCase
 }
 
-func NewRouter(registerUser *auth.RegisterUserUseCase) *Router {
-	return &Router{registerUser}
+func NewRouter(registerUser *auth.RegisterUserUseCase, loginUser *auth.LoginUserUseCase) *Router {
+	return &Router{registerUser, loginUser}
 }
 
 func (router *Router) RegisterRoutes(engine *gin.Engine) {
 	users := engine.Group("/api/v1")
 	{
-		users.POST("/login", func(ctx *gin.Context) {})
+		users.POST("/login", router.loginUser.Execute)
 		users.POST("/signup", router.registerUser.Execute)
 	}
 

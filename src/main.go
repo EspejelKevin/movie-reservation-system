@@ -38,8 +38,9 @@ func main() {
 	validate.RegisterValidation("password", validators.ValidatePassword)
 
 	registerUser := auth.NewRegisterUserUseCase(userRepository, validate)
+	loginUser := auth.NewLoginUserUseCase(userRepository, settings, validate)
 
-	router := routes.NewRouter(registerUser)
+	router := routes.NewRouter(registerUser, loginUser)
 	engine := gin.Default()
 	router.RegisterRoutes(engine)
 
