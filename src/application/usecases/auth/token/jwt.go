@@ -1,6 +1,7 @@
 package token
 
 import (
+	"errors"
 	"strconv"
 	"time"
 
@@ -26,4 +27,26 @@ func CreateToken(key string, userID uint, role string) (string, error) {
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	return token.SignedString([]byte(key))
+}
+
+func VerifyToken(key string, tokenString string) (*CustomClaims, error) {
+	token, err := jwt.ParseWithClaims(tokenString, &CustomClaims{}, func(token *jwt.Token) (any, error) {
+		return []byte(key), nil
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if !token.Valid {
+		return nil, errors.New("token invalido")
+	}
+
+	claims, ok := token.Claims.(*CustomClaims)
+
+	if !ok {
+		return nil, errors.New("parseo de claims invalido")
+	}
+
+	return claims, nil
 }
