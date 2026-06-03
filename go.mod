@@ -5,6 +5,7 @@ go 1.26.1
 require github.com/gin-gonic/gin v1.12.0
 
 require (
+	github.com/golang-jwt/jwt/v5 v5.3.1 // indirect
 	github.com/mattn/go-sqlite3 v1.14.22 // indirect
 	gorm.io/driver/sqlite v1.6.0 // indirect
 )
