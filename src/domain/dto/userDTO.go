@@ -13,3 +13,12 @@ func (dto UserDTO) HashPassword() string {
 	hashed, _ := bcrypt.GenerateFromPassword([]byte(dto.Password), bcrypt.DefaultCost)
 	return string(hashed)
 }
+
+type LoginRequestDTO struct {
+	Email    string `json:"email" validate:"required,email"`
+	Password string `json:"password" validate:"required,password"`
+}
+
+func (dto LoginRequestDTO) VerifyPassword(hashedPassword string) bool {
+	return bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(dto.Password)) == nil
+}
