@@ -40,6 +40,7 @@ func main() {
 
 	validate := validator.New()
 	validate.RegisterValidation("password", validators.ValidatePassword)
+	validate.RegisterValidation("role", validators.ValidateRole(settings.RegexRole))
 
 	registerUser := auth.NewRegisterUserUseCase(userRepository, validate)
 	loginUser := auth.NewLoginUserUseCase(userRepository, settings, validate)
@@ -47,10 +48,14 @@ func main() {
 	loginAdmin := admin.NewLoginAdminUseCase(userRepository, settings, validate)
 
 	getRoles := role.NewGetRolesUseCase(roleRepository)
+	getRole := role.NewGetRoleUseCase(roleRepository)
+	saveRole := role.NewSaveRole(roleRepository, validate)
 
 	middlewares := middlewares.NewMiddlewares(settings)
 
-	router := routes.NewRouter(registerUser, loginUser, loginAdmin, getRoles, middlewares)
+	router := routes.NewRouter(registerUser, loginUser, loginAdmin,
+		getRoles, getRole, saveRole, middlewares)
+
 	engine := gin.Default()
 	router.RegisterRoutes(engine)
 
