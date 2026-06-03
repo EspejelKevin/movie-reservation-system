@@ -1,6 +1,7 @@
 package routes
 
 import (
+	"movie-reservation-system/src/application/usecases/admin"
 	"movie-reservation-system/src/application/usecases/auth"
 
 	"github.com/gin-gonic/gin"
@@ -9,13 +10,20 @@ import (
 type Router struct {
 	registerUser *auth.RegisterUserUseCase
 	loginUser    *auth.LoginUserUseCase
+	loginAdmin   *admin.LoginAdminUseCase
 }
 
-func NewRouter(registerUser *auth.RegisterUserUseCase, loginUser *auth.LoginUserUseCase) *Router {
-	return &Router{registerUser, loginUser}
+func NewRouter(registerUser *auth.RegisterUserUseCase, loginUser *auth.LoginUserUseCase,
+	loginAdmin *admin.LoginAdminUseCase) *Router {
+	return &Router{registerUser, loginUser, loginAdmin}
 }
 
 func (router *Router) RegisterRoutes(engine *gin.Engine) {
+	admin := engine.Group("/api/v1/admin")
+	{
+		admin.POST("/login", router.loginAdmin.Execute)
+	}
+
 	users := engine.Group("/api/v1")
 	{
 		users.POST("/login", router.loginUser.Execute)

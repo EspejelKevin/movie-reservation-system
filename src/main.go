@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"movie-reservation-system/src/application/usecases/admin"
 	"movie-reservation-system/src/application/usecases/auth"
 	"movie-reservation-system/src/domain/entities"
 	"movie-reservation-system/src/domain/settings"
@@ -40,7 +41,9 @@ func main() {
 	registerUser := auth.NewRegisterUserUseCase(userRepository, validate)
 	loginUser := auth.NewLoginUserUseCase(userRepository, settings, validate)
 
-	router := routes.NewRouter(registerUser, loginUser)
+	loginAdmin := admin.NewLoginAdminUseCase(userRepository, settings, validate)
+
+	router := routes.NewRouter(registerUser, loginUser, loginAdmin)
 	engine := gin.Default()
 	router.RegisterRoutes(engine)
 
