@@ -25,5 +25,8 @@ func (repository *UserRepositoryGorm) GetUserByEmailOrUserName(ctx context.Conte
 	username string) (entities.User, error) {
 
 	db := repository.connection.GetDB()
-	return gorm.G[entities.User](db).Where("email = ?", email).Or("username = ?", username).First(ctx)
+	return gorm.G[entities.User](db).
+		Preload("Role", nil).
+		Where("email = ? OR user_name = ?", email, username).
+		First(ctx)
 }
