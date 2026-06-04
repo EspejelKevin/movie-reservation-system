@@ -50,12 +50,13 @@ func main() {
 	getRoles := role.NewGetRolesUseCase(roleRepository)
 	getRole := role.NewGetRoleUseCase(roleRepository)
 	saveRole := role.NewSaveRoleUseCase(roleRepository, validate)
+	updateRole := role.NewUpdateRoleUseCase(roleRepository, validate)
 	deleteRole := role.NewDeleteRoleUseCase(roleRepository)
 
 	middlewares := middlewares.NewMiddlewares(settings)
 
 	router := routes.NewRouter(registerUser, loginUser, loginAdmin,
-		getRoles, getRole, saveRole, deleteRole, middlewares)
+		getRoles, getRole, saveRole, updateRole, deleteRole, middlewares)
 
 	engine := gin.Default()
 	router.RegisterRoutes(engine)

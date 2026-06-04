@@ -16,6 +16,7 @@ type Router struct {
 	getRoles     *role.GetRolesUseCase
 	getRole      *role.GetRoleUseCase
 	saveRole     *role.SaveRoleUseCase
+	updateRole   *role.UpdateRoleUseCase
 	deleteRole   *role.DeleteRoleUseCase
 
 	middlewares *middlewares.Middlewares
@@ -24,8 +25,10 @@ type Router struct {
 func NewRouter(registerUser *auth.RegisterUserUseCase, loginUser *auth.LoginUserUseCase,
 	loginAdmin *admin.LoginAdminUseCase,
 	getRoles *role.GetRolesUseCase, getRole *role.GetRoleUseCase, saveRole *role.SaveRoleUseCase,
-	deleteRole *role.DeleteRoleUseCase, middlewares *middlewares.Middlewares) *Router {
-	return &Router{registerUser, loginUser, loginAdmin, getRoles, getRole, saveRole, deleteRole, middlewares}
+	updateRole *role.UpdateRoleUseCase, deleteRole *role.DeleteRoleUseCase,
+	middlewares *middlewares.Middlewares) *Router {
+	return &Router{registerUser, loginUser, loginAdmin, getRoles,
+		getRole, saveRole, updateRole, deleteRole, middlewares}
 }
 
 func (router *Router) RegisterRoutes(engine *gin.Engine) {
@@ -46,7 +49,7 @@ func (router *Router) RegisterRoutes(engine *gin.Engine) {
 		roles.GET("/roles", router.middlewares.Authorization("ADMIN"), router.getRoles.Execute)
 		roles.GET("/roles/:id", router.middlewares.Authorization("ADMIN"), router.getRole.Execute)
 		roles.POST("/roles", router.middlewares.Authorization("ADMIN"), router.saveRole.Execute)
-		roles.PUT("/roles/:id", router.middlewares.Authorization("ADMIN"), func(ctx *gin.Context) {})
+		roles.PUT("/roles/:id", router.middlewares.Authorization("ADMIN"), router.updateRole.Execute)
 		roles.DELETE("/roles/:id", router.middlewares.Authorization("ADMIN"), router.deleteRole.Execute)
 	}
 }

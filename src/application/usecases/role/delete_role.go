@@ -44,5 +44,5 @@ func (usecase *DeleteRoleUseCase) Execute(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, gin.H{"message": "eliminacion correcta"})
+	ctx.JSON(http.StatusOK, gin.H{"message": "eliminacion exitosa"})
 }
