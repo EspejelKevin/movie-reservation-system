@@ -12,16 +12,16 @@ import (
 	"gorm.io/gorm"
 )
 
-type SaveRole struct {
+type SaveRoleUseCase struct {
 	repository *repositories.RoleRepositoryGorm
 	validate   *validator.Validate
 }
 
-func NewSaveRole(repository *repositories.RoleRepositoryGorm, validate *validator.Validate) *SaveRole {
-	return &SaveRole{repository, validate}
+func NewSaveRoleUseCase(repository *repositories.RoleRepositoryGorm, validate *validator.Validate) *SaveRoleUseCase {
+	return &SaveRoleUseCase{repository, validate}
 }
 
-func (usecase *SaveRole) Execute(ctx *gin.Context) {
+func (usecase *SaveRoleUseCase) Execute(ctx *gin.Context) {
 	var roleDTO dto.RoleDTO
 
 	if err := ctx.ShouldBindJSON(&roleDTO); err != nil {
