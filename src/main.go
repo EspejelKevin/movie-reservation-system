@@ -33,7 +33,9 @@ func main() {
 	}
 
 	db := connection.GetDB()
-	db.AutoMigrate(&entities.User{}, &entities.Role{})
+	db.AutoMigrate(&entities.User{}, &entities.Role{},
+		&entities.Genre{}, &entities.Movie{}, &entities.Seat{},
+		&entities.ShowTime{}, &entities.Reservation{})
 
 	userRepository := repositories.NewUserRepositoryGorm(connection)
 	roleRepository := repositories.NewRoleRepositoryGorm(connection)
