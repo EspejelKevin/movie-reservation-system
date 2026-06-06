@@ -4,6 +4,7 @@ import (
 	"log"
 	"movie-reservation-system/src/application/usecases/admin"
 	"movie-reservation-system/src/application/usecases/auth"
+	"movie-reservation-system/src/application/usecases/genre"
 	"movie-reservation-system/src/application/usecases/role"
 	"movie-reservation-system/src/domain/entities"
 	"movie-reservation-system/src/domain/settings"
@@ -39,6 +40,7 @@ func main() {
 
 	userRepository := repositories.NewUserRepositoryGorm(connection)
 	roleRepository := repositories.NewRoleRepositoryGorm(connection)
+	genreRepository := repositories.NewGenreRepositoryGorm(connection)
 
 	validate := validator.New()
 	validate.RegisterValidation("password", validators.ValidatePassword)
@@ -55,13 +57,24 @@ func main() {
 	updateRole := role.NewUpdateRoleUseCase(roleRepository, validate)
 	deleteRole := role.NewDeleteRoleUseCase(roleRepository)
 
+	getGenres := genre.NewGetGenresUseCase(genreRepository)
+	getGenre := genre.NewGetGenreUseCase(genreRepository)
+	saveGenre := genre.NewSaveGenreUseCase(genreRepository, validate)
+	updateGenre := genre.NewUpdateGenreUseCase(genreRepository, validate)
+	deleteGenre := genre.NewDeleteGenreUseCase(genreRepository)
+
 	middlewares := middlewares.NewMiddlewares(settings)
 
-	router := routes.NewRouter(registerUser, loginUser, loginAdmin,
-		getRoles, getRole, saveRole, updateRole, deleteRole, middlewares)
+	routerAdmin := routes.NewRouterAdmin(loginAdmin)
+	routerUser := routes.NewRouterUser(registerUser, loginUser)
+	routerRole := routes.NewRouterRole(getRoles, getRole, saveRole, updateRole, deleteRole, middlewares)
+	routerGenre := routes.NewRouterGenre(getGenres, getGenre, saveGenre, updateGenre, deleteGenre, middlewares)
 
 	engine := gin.Default()
-	router.RegisterRoutes(engine)
+	routerAdmin.RegisterRoutesAdmin(engine)
+	routerUser.RegisterRoutesUser(engine)
+	routerRole.RegisterRoutesRole(engine)
+	routerGenre.RegisterRoutesGenre(engine)
 
 	if err := engine.Run(settings.AppPort); err != nil {
 		log.Fatal(err)
