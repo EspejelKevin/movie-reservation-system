@@ -5,6 +5,7 @@ import (
 	"movie-reservation-system/src/application/usecases/admin"
 	"movie-reservation-system/src/application/usecases/auth"
 	"movie-reservation-system/src/application/usecases/genre"
+	"movie-reservation-system/src/application/usecases/movie"
 	"movie-reservation-system/src/application/usecases/role"
 	"movie-reservation-system/src/domain/entities"
 	"movie-reservation-system/src/domain/settings"
@@ -13,6 +14,7 @@ import (
 	"movie-reservation-system/src/infrastructure/middlewares"
 	"movie-reservation-system/src/infrastructure/repositories"
 	"movie-reservation-system/src/infrastructure/routes"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
@@ -41,6 +43,7 @@ func main() {
 	userRepository := repositories.NewUserRepositoryGorm(connection)
 	roleRepository := repositories.NewRoleRepositoryGorm(connection)
 	genreRepository := repositories.NewGenreRepositoryGorm(connection)
+	movieRepository := repositories.NewMovieRepositoryGorm(connection)
 
 	validate := validator.New()
 	validate.RegisterValidation("password", validators.ValidatePassword)
@@ -63,18 +66,26 @@ func main() {
 	updateGenre := genre.NewUpdateGenreUseCase(genreRepository, validate)
 	deleteGenre := genre.NewDeleteGenreUseCase(genreRepository)
 
+	getMovies := movie.NewGetMoviesUseCase(movieRepository)
+	saveMovie := movie.NewSaveMovieUseCase(movieRepository, validate)
+	updateImage := movie.NewUpdateImageMovieUseCase(movieRepository, settings)
+
 	middlewares := middlewares.NewMiddlewares(settings)
 
 	routerAdmin := routes.NewRouterAdmin(loginAdmin)
 	routerUser := routes.NewRouterUser(registerUser, loginUser)
 	routerRole := routes.NewRouterRole(getRoles, getRole, saveRole, updateRole, deleteRole, middlewares)
 	routerGenre := routes.NewRouterGenre(getGenres, getGenre, saveGenre, updateGenre, deleteGenre, middlewares)
+	routerMovie := routes.NewRouterMovie(getMovies, saveMovie, updateImage, middlewares)
 
 	engine := gin.Default()
 	routerAdmin.RegisterRoutesAdmin(engine)
 	routerUser.RegisterRoutesUser(engine)
 	routerRole.RegisterRoutesRole(engine)
 	routerGenre.RegisterRoutesGenre(engine)
+	routerMovie.RegisterRoutesMovie(engine)
+
+	engine.StaticFS("/images", http.Dir(settings.ImagePath))
 
 	if err := engine.Run(settings.AppPort); err != nil {
 		log.Fatal(err)
