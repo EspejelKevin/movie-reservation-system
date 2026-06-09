@@ -7,6 +7,7 @@ type Settings struct {
 	DbUri     string `conform:"env=DB_URI,required"`
 	Key       string `conform:"env=KEY,required"`
 	RegexRole string `conform:"env=REGEX_ROLE,required"`
+	ImagePath string `conform:"env=IMAGE_PATH,required"`
 }
 
 func NewSettings() (*Settings, error) {
