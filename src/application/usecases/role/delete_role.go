@@ -1,7 +1,7 @@
 package role
 
 import (
-	"movie-reservation-system/src/infrastructure/repositories"
+	"movie-reservation-system/src/domain/interfaces"
 	"net/http"
 	"strconv"
 
@@ -10,10 +10,10 @@ import (
 )
 
 type DeleteRoleUseCase struct {
-	repository *repositories.RoleRepositoryGorm
+	repository interfaces.RoleRepository
 }
 
-func NewDeleteRoleUseCase(repository *repositories.RoleRepositoryGorm) *DeleteRoleUseCase {
+func NewDeleteRoleUseCase(repository interfaces.RoleRepository) *DeleteRoleUseCase {
 	return &DeleteRoleUseCase{repository}
 }
 

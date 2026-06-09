@@ -1,17 +1,17 @@
 package genre
 
 import (
-	"movie-reservation-system/src/infrastructure/repositories"
+	"movie-reservation-system/src/domain/interfaces"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
 
 type GetGenresUseCase struct {
-	repository *repositories.GenreRepositoryGorm
+	repository interfaces.GenreRepository
 }
 
-func NewGetGenresUseCase(repository *repositories.GenreRepositoryGorm) *GetGenresUseCase {
+func NewGetGenresUseCase(repository interfaces.GenreRepository) *GetGenresUseCase {
 	return &GetGenresUseCase{repository}
 }
 

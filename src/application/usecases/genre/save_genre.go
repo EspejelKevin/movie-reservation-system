@@ -3,7 +3,7 @@ package genre
 import (
 	"movie-reservation-system/src/domain/dto"
 	"movie-reservation-system/src/domain/entities"
-	"movie-reservation-system/src/infrastructure/repositories"
+	"movie-reservation-system/src/domain/interfaces"
 	"net/http"
 	"reflect"
 
@@ -13,11 +13,11 @@ import (
 )
 
 type SaveGenreUseCase struct {
-	repository *repositories.GenreRepositoryGorm
+	repository interfaces.GenreRepository
 	validate   *validator.Validate
 }
 
-func NewSaveGenreUseCase(repository *repositories.GenreRepositoryGorm, validate *validator.Validate) *SaveGenreUseCase {
+func NewSaveGenreUseCase(repository interfaces.GenreRepository, validate *validator.Validate) *SaveGenreUseCase {
 	return &SaveGenreUseCase{repository, validate}
 }
 

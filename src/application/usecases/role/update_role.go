@@ -2,7 +2,7 @@ package role
 
 import (
 	"movie-reservation-system/src/domain/dto"
-	"movie-reservation-system/src/infrastructure/repositories"
+	"movie-reservation-system/src/domain/interfaces"
 	"net/http"
 	"strconv"
 
@@ -12,11 +12,11 @@ import (
 )
 
 type UpdateRoleUseCase struct {
-	repository *repositories.RoleRepositoryGorm
+	repository interfaces.RoleRepository
 	validate   *validator.Validate
 }
 
-func NewUpdateRoleUseCase(repository *repositories.RoleRepositoryGorm,
+func NewUpdateRoleUseCase(repository interfaces.RoleRepository,
 	validate *validator.Validate) *UpdateRoleUseCase {
 	return &UpdateRoleUseCase{repository, validate}
 }

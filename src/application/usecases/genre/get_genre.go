@@ -1,7 +1,7 @@
 package genre
 
 import (
-	"movie-reservation-system/src/infrastructure/repositories"
+	"movie-reservation-system/src/domain/interfaces"
 	"net/http"
 	"strconv"
 
@@ -10,10 +10,10 @@ import (
 )
 
 type GetGenreUseCase struct {
-	repository *repositories.GenreRepositoryGorm
+	repository interfaces.GenreRepository
 }
 
-func NewGetGenreUseCase(repository *repositories.GenreRepositoryGorm) *GetGenreUseCase {
+func NewGetGenreUseCase(repository interfaces.GenreRepository) *GetGenreUseCase {
 	return &GetGenreUseCase{repository}
 }
 

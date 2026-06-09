@@ -2,7 +2,7 @@ package genre
 
 import (
 	"movie-reservation-system/src/domain/dto"
-	"movie-reservation-system/src/infrastructure/repositories"
+	"movie-reservation-system/src/domain/interfaces"
 	"net/http"
 	"strconv"
 
@@ -12,11 +12,11 @@ import (
 )
 
 type UpdateGenreUseCase struct {
-	repository *repositories.GenreRepositoryGorm
+	repository interfaces.GenreRepository
 	validate   *validator.Validate
 }
 
-func NewUpdateGenreUseCase(repository *repositories.GenreRepositoryGorm,
+func NewUpdateGenreUseCase(repository interfaces.GenreRepository,
 	validate *validator.Validate) *UpdateGenreUseCase {
 	return &UpdateGenreUseCase{repository, validate}
 }

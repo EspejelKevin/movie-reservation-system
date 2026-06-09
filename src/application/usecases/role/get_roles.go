@@ -1,17 +1,17 @@
 package role
 
 import (
-	"movie-reservation-system/src/infrastructure/repositories"
+	"movie-reservation-system/src/domain/interfaces"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
 
 type GetRolesUseCase struct {
-	repository *repositories.RoleRepositoryGorm
+	repository interfaces.RoleRepository
 }
 
-func NewGetRolesUseCase(repository *repositories.RoleRepositoryGorm) *GetRolesUseCase {
+func NewGetRolesUseCase(repository interfaces.RoleRepository) *GetRolesUseCase {
 	return &GetRolesUseCase{repository}
 }
 

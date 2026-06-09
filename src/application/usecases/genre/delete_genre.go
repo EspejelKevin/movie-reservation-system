@@ -1,7 +1,7 @@
 package genre
 
 import (
-	"movie-reservation-system/src/infrastructure/repositories"
+	"movie-reservation-system/src/domain/interfaces"
 	"net/http"
 	"strconv"
 
@@ -10,10 +10,10 @@ import (
 )
 
 type DeleteGenreUseCase struct {
-	repository *repositories.GenreRepositoryGorm
+	repository interfaces.GenreRepository
 }
 
-func NewDeleteGenreUseCase(repository *repositories.GenreRepositoryGorm) *DeleteGenreUseCase {
+func NewDeleteGenreUseCase(repository interfaces.GenreRepository) *DeleteGenreUseCase {
 	return &DeleteGenreUseCase{repository}
 }
 

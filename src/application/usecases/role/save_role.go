@@ -3,7 +3,7 @@ package role
 import (
 	"movie-reservation-system/src/domain/dto"
 	"movie-reservation-system/src/domain/entities"
-	"movie-reservation-system/src/infrastructure/repositories"
+	"movie-reservation-system/src/domain/interfaces"
 	"net/http"
 	"reflect"
 
@@ -13,11 +13,11 @@ import (
 )
 
 type SaveRoleUseCase struct {
-	repository *repositories.RoleRepositoryGorm
+	repository interfaces.RoleRepository
 	validate   *validator.Validate
 }
 
-func NewSaveRoleUseCase(repository *repositories.RoleRepositoryGorm, validate *validator.Validate) *SaveRoleUseCase {
+func NewSaveRoleUseCase(repository interfaces.RoleRepository, validate *validator.Validate) *SaveRoleUseCase {
 	return &SaveRoleUseCase{repository, validate}
 }
 
