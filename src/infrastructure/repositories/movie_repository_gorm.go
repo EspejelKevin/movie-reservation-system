@@ -2,6 +2,7 @@ package repositories
 
 import (
 	"context"
+	"movie-reservation-system/src/domain/dto"
 	"movie-reservation-system/src/domain/entities"
 	"movie-reservation-system/src/infrastructure/database"
 
@@ -33,12 +34,13 @@ func (repository *MovieRepositoryGorm) GetMovieByTitle(ctx context.Context, titl
 
 func (repository *MovieRepositoryGorm) GetMovieByID(ctx context.Context, id uint) (entities.Movie, error) {
 	db := repository.connection.GetDB()
-	return gorm.G[entities.Movie](db).Where("id = ?", id).First(ctx)
+	return gorm.G[entities.Movie](db).Preload("Genre", nil).Where("id = ?", id).First(ctx)
 }
 
-func (repository *MovieRepositoryGorm) Update(ctx context.Context, id uint, name string) (int, error) {
+func (repository *MovieRepositoryGorm) Update(ctx context.Context, id uint, movie dto.MovieDTO) (int, error) {
 	db := repository.connection.GetDB()
-	return gorm.G[entities.Movie](db).Where("id = ?", id).Update(ctx, "name", name)
+	return gorm.G[entities.Movie](db).Where("id = ?", id).Updates(ctx, entities.Movie{Title: movie.Title,
+		Description: movie.Description, GenreID: movie.GenreID})
 }
 
 func (repository *MovieRepositoryGorm) UpdateImage(ctx context.Context, id uint, image string) (int, error) {
