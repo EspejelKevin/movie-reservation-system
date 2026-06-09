@@ -29,7 +29,7 @@ func (usecase *GetMoviesUseCase) Execute(ctx *gin.Context) {
 }
 
 func (usecase *GetMoviesUseCase) mapMovies(movies []entities.Movie) []dto.MovieResponse {
-	var movieResponse []dto.MovieResponse
+	movieResponse := make([]dto.MovieResponse, 0, len(movies))
 
 	for _, movie := range movies {
 		movieResponse = append(movieResponse, dto.MovieResponse{

@@ -37,7 +37,7 @@ func main() {
 
 	db := connection.GetDB()
 	db.AutoMigrate(&entities.User{}, &entities.Role{},
-		&entities.Genre{}, &entities.Movie{}, &entities.Seat{},
+		&entities.Genre{}, &entities.Movie{},
 		&entities.ShowTime{}, &entities.Reservation{})
 
 	userRepository := repositories.NewUserRepositoryGorm(connection)
@@ -66,9 +66,12 @@ func main() {
 	updateGenre := genre.NewUpdateGenreUseCase(genreRepository, validate)
 	deleteGenre := genre.NewDeleteGenreUseCase(genreRepository)
 
+	getMovie := movie.NewGetMovieUseCase(movieRepository)
 	getMovies := movie.NewGetMoviesUseCase(movieRepository)
 	saveMovie := movie.NewSaveMovieUseCase(movieRepository, validate)
 	updateImage := movie.NewUpdateImageMovieUseCase(movieRepository, settings)
+	updateMovie := movie.NewUpdateMovieUseCase(movieRepository, validate)
+	deleteMovie := movie.NewDeleteMovieUseCase(movieRepository, settings)
 
 	middlewares := middlewares.NewMiddlewares(settings)
 
@@ -76,7 +79,7 @@ func main() {
 	routerUser := routes.NewRouterUser(registerUser, loginUser)
 	routerRole := routes.NewRouterRole(getRoles, getRole, saveRole, updateRole, deleteRole, middlewares)
 	routerGenre := routes.NewRouterGenre(getGenres, getGenre, saveGenre, updateGenre, deleteGenre, middlewares)
-	routerMovie := routes.NewRouterMovie(getMovies, saveMovie, updateImage, middlewares)
+	routerMovie := routes.NewRouterMovie(getMovie, getMovies, saveMovie, updateImage, updateMovie, deleteMovie, middlewares)
 
 	engine := gin.Default()
 	routerAdmin.RegisterRoutesAdmin(engine)
