@@ -2,7 +2,7 @@ package dto
 
 type MovieDTO struct {
 	Title       string `json:"title" validate:"required,min=5,max=30"`
-	Description string `json:"description" validate:"required,min=5,max=100"`
+	Description string `json:"description" validate:"required,min=5,max=300"`
 	GenreID     uint   `json:"genre_id" validate:"required,gte=1"`
 }
 
