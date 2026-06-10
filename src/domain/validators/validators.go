@@ -2,6 +2,7 @@ package validators
 
 import (
 	"regexp"
+	"time"
 
 	"github.com/go-playground/validator/v10"
 )
@@ -25,4 +26,14 @@ func ValidateRole(regexRole string) validator.Func {
 		role := fl.Field().String()
 		return regexp.MustCompile(regexRole).MatchString(role)
 	}
+}
+
+func ValidateEndDate(fl validator.FieldLevel) bool {
+	startDateStr := fl.Parent().FieldByName("StartDate").String()
+	endDateStr := fl.Field().String()
+
+	start, _ := time.Parse("2006-01-02 15:04:05", startDateStr)
+	end, _ := time.Parse("2006-01-02 15:04:05", endDateStr)
+
+	return end.After(start)
 }
