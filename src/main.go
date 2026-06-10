@@ -7,6 +7,7 @@ import (
 	"movie-reservation-system/src/application/usecases/genre"
 	"movie-reservation-system/src/application/usecases/movie"
 	"movie-reservation-system/src/application/usecases/role"
+	"movie-reservation-system/src/application/usecases/showtime"
 	"movie-reservation-system/src/domain/entities"
 	"movie-reservation-system/src/domain/settings"
 	"movie-reservation-system/src/domain/validators"
@@ -44,10 +45,12 @@ func main() {
 	roleRepository := repositories.NewRoleRepositoryGorm(connection)
 	genreRepository := repositories.NewGenreRepositoryGorm(connection)
 	movieRepository := repositories.NewMovieRepositoryGorm(connection)
+	showtimeRepository := repositories.NewShowTimeRepositoryGorm(connection)
 
 	validate := validator.New()
 	validate.RegisterValidation("password", validators.ValidatePassword)
 	validate.RegisterValidation("role", validators.ValidateRole(settings.RegexRole))
+	validate.RegisterValidation("after_start", validators.ValidateEndDate)
 
 	registerUser := auth.NewRegisterUserUseCase(userRepository, validate)
 	loginUser := auth.NewLoginUserUseCase(userRepository, settings, validate)
@@ -73,6 +76,9 @@ func main() {
 	updateMovie := movie.NewUpdateMovieUseCase(movieRepository, validate)
 	deleteMovie := movie.NewDeleteMovieUseCase(movieRepository, settings)
 
+	getShows := showtime.NewGetShowTimesUseCase(showtimeRepository)
+	saveShowTime := showtime.NewSaveShowTimeUseCase(showtimeRepository, validate)
+
 	middlewares := middlewares.NewMiddlewares(settings)
 
 	routerAdmin := routes.NewRouterAdmin(loginAdmin)
@@ -80,6 +86,7 @@ func main() {
 	routerRole := routes.NewRouterRole(getRoles, getRole, saveRole, updateRole, deleteRole, middlewares)
 	routerGenre := routes.NewRouterGenre(getGenres, getGenre, saveGenre, updateGenre, deleteGenre, middlewares)
 	routerMovie := routes.NewRouterMovie(getMovie, getMovies, saveMovie, updateImage, updateMovie, deleteMovie, middlewares)
+	routerShowTime := routes.NewRouterShowTime(getShows, saveShowTime, middlewares)
 
 	engine := gin.Default()
 	routerAdmin.RegisterRoutesAdmin(engine)
@@ -87,6 +94,7 @@ func main() {
 	routerRole.RegisterRoutesRole(engine)
 	routerGenre.RegisterRoutesGenre(engine)
 	routerMovie.RegisterRoutesMovie(engine)
+	routerShowTime.RegisterRoutesShowTime(engine)
 
 	engine.StaticFS("/images", http.Dir(settings.ImagePath))
 
