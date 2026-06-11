@@ -77,7 +77,10 @@ func main() {
 	deleteMovie := movie.NewDeleteMovieUseCase(movieRepository, settings)
 
 	getShows := showtime.NewGetShowTimesUseCase(showtimeRepository)
-	saveShowTime := showtime.NewSaveShowTimeUseCase(showtimeRepository, validate)
+	getShow := showtime.NewGetShowTimeUseCase(showtimeRepository)
+	saveShow := showtime.NewSaveShowTimeUseCase(showtimeRepository, validate)
+	updateShow := showtime.NewUpdateShowTimeUseCase(showtimeRepository, validate)
+	deleteShow := showtime.NewDeleteShowTimeUseCase(showtimeRepository)
 
 	middlewares := middlewares.NewMiddlewares(settings)
 
@@ -86,7 +89,7 @@ func main() {
 	routerRole := routes.NewRouterRole(getRoles, getRole, saveRole, updateRole, deleteRole, middlewares)
 	routerGenre := routes.NewRouterGenre(getGenres, getGenre, saveGenre, updateGenre, deleteGenre, middlewares)
 	routerMovie := routes.NewRouterMovie(getMovie, getMovies, saveMovie, updateImage, updateMovie, deleteMovie, middlewares)
-	routerShowTime := routes.NewRouterShowTime(getShows, saveShowTime, middlewares)
+	routerShowTime := routes.NewRouterShowTime(getShow, getShows, saveShow, updateShow, deleteShow, middlewares)
 
 	engine := gin.Default()
 	routerAdmin.RegisterRoutesAdmin(engine)

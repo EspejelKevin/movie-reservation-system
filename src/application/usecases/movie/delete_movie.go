@@ -52,5 +52,4 @@ func (usecase *DeleteMovieUseCase) Execute(ctx *gin.Context) {
 	os.Remove(filepath.Join(usecase.settings.ImagePath, filepath.Base(movieDB.Image.String)))
 
 	ctx.JSON(http.StatusOK, gin.H{"message": "eliminacion exitosa"})
-
 }

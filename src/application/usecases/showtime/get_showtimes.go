@@ -9,15 +9,15 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type GetShowTImesUseCase struct {
+type GetShowTimesUseCase struct {
 	repository interfaces.ShowTimeRepository
 }
 
-func NewGetShowTimesUseCase(repository interfaces.ShowTimeRepository) *GetShowTImesUseCase {
-	return &GetShowTImesUseCase{repository}
+func NewGetShowTimesUseCase(repository interfaces.ShowTimeRepository) *GetShowTimesUseCase {
+	return &GetShowTimesUseCase{repository}
 }
 
-func (usecase *GetShowTImesUseCase) Execute(ctx *gin.Context) {
+func (usecase *GetShowTimesUseCase) Execute(ctx *gin.Context) {
 	shows, err := usecase.repository.GetShows(ctx.Request.Context())
 
 	if err != nil {
@@ -28,7 +28,7 @@ func (usecase *GetShowTImesUseCase) Execute(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{"shows": usecase.mapShows(shows)})
 }
 
-func (usecase *GetShowTImesUseCase) mapShows(shows []entities.ShowTime) []dto.ShowResponse {
+func (usecase *GetShowTimesUseCase) mapShows(shows []entities.ShowTime) []dto.ShowResponse {
 	showResponse := make([]dto.ShowResponse, 0, len(shows))
 
 	for _, show := range shows {
