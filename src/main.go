@@ -6,6 +6,7 @@ import (
 	"movie-reservation-system/src/application/usecases/auth"
 	"movie-reservation-system/src/application/usecases/genre"
 	"movie-reservation-system/src/application/usecases/movie"
+	"movie-reservation-system/src/application/usecases/reservation"
 	"movie-reservation-system/src/application/usecases/role"
 	"movie-reservation-system/src/application/usecases/showtime"
 	"movie-reservation-system/src/domain/entities"
@@ -46,6 +47,7 @@ func main() {
 	genreRepository := repositories.NewGenreRepositoryGorm(connection)
 	movieRepository := repositories.NewMovieRepositoryGorm(connection)
 	showtimeRepository := repositories.NewShowTimeRepositoryGorm(connection)
+	reservationRepository := repositories.NewReservationRepositoryGorm(connection)
 
 	validate := validator.New()
 	validate.RegisterValidation("password", validators.ValidatePassword)
@@ -82,6 +84,9 @@ func main() {
 	updateShow := showtime.NewUpdateShowTimeUseCase(showtimeRepository, validate)
 	deleteShow := showtime.NewDeleteShowTimeUseCase(showtimeRepository)
 
+	getReservation := reservation.NewGetReservationUseCase(reservationRepository)
+	saveReservation := reservation.NewSaveReservationUseCase(reservationRepository, showtimeRepository, validate)
+
 	middlewares := middlewares.NewMiddlewares(settings)
 
 	routerAdmin := routes.NewRouterAdmin(loginAdmin)
@@ -90,6 +95,7 @@ func main() {
 	routerGenre := routes.NewRouterGenre(getGenres, getGenre, saveGenre, updateGenre, deleteGenre, middlewares)
 	routerMovie := routes.NewRouterMovie(getMovie, getMovies, saveMovie, updateImage, updateMovie, deleteMovie, middlewares)
 	routerShowTime := routes.NewRouterShowTime(getShow, getShows, saveShow, updateShow, deleteShow, middlewares)
+	routerReservation := routes.NewRouterReservation(getReservation, saveReservation, middlewares)
 
 	engine := gin.Default()
 	routerAdmin.RegisterRoutesAdmin(engine)
@@ -98,6 +104,7 @@ func main() {
 	routerGenre.RegisterRoutesGenre(engine)
 	routerMovie.RegisterRoutesMovie(engine)
 	routerShowTime.RegisterRoutesShowTime(engine)
+	routerReservation.RegisterRoutesReservation(engine)
 
 	engine.StaticFS("/images", http.Dir(settings.ImagePath))
 
