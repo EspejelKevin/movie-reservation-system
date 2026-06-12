@@ -4,6 +4,7 @@ import (
 	"movie-reservation-system/src/application/usecases/auth/token"
 	"movie-reservation-system/src/domain/settings"
 	"net/http"
+	"strconv"
 	"strings"
 
 	"github.com/gin-gonic/gin"
@@ -47,7 +48,9 @@ func (middlewares *Middlewares) Authentication() gin.HandlerFunc {
 			return
 		}
 
-		ctx.Set("userID", claims.Subject)
+		userID, _ := strconv.ParseUint(claims.Subject, 10, 0)
+
+		ctx.Set("userID", userID)
 		ctx.Set("userRole", claims.Role)
 
 		ctx.Next()
@@ -59,7 +62,7 @@ func (middlewares *Middlewares) Authorization(roles ...string) gin.HandlerFunc {
 		userRole, exists := ctx.Get("userRole")
 
 		if !exists {
-			ctx.AbortWithStatusJSON(http.StatusForbidden, gin.H{"error": "no se pudo determinar el rol"})
+			ctx.AbortWithStatusJSON(http.StatusForbidden, gin.H{"error": "no se puede determinar el rol"})
 			return
 		}
 
