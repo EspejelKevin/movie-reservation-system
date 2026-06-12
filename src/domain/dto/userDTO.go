@@ -9,6 +9,12 @@ type UserDTO struct {
 	Password string `json:"password" validate:"required,password"`
 }
 
+type UserResponse struct {
+	Name     string `json:"name"`
+	UserName string `json:"username"`
+	Email    string `json:"email"`
+}
+
 func (dto UserDTO) HashPassword() string {
 	hashed, _ := bcrypt.GenerateFromPassword([]byte(dto.Password), bcrypt.DefaultCost)
 	return string(hashed)
