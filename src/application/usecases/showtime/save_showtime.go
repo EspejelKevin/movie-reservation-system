@@ -49,11 +49,11 @@ func (usecase *SaveShowTimeUseCase) Execute(ctx *gin.Context) {
 	}
 
 	newShow := entities.ShowTime{
-		Folio:                  showDTO.Folio,
-		StartDate:              usecase.toTime(showDTO.StartDate),
-		EndDate:                usecase.toTime(showDTO.EndDate),
-		AvailableQuantitySeats: showDTO.AvailableQuantitySeats,
-		MovieID:                showDTO.MovieID,
+		Folio:         showDTO.Folio,
+		StartDate:     usecase.toTime(showDTO.StartDate),
+		EndDate:       usecase.toTime(showDTO.EndDate),
+		QuantitySeats: showDTO.QuantitySeats,
+		MovieID:       showDTO.MovieID,
 	}
 
 	if err := usecase.repository.Save(ctx.Request.Context(), newShow); err != nil {

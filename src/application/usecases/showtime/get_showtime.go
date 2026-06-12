@@ -43,7 +43,7 @@ func (usecase *GetShowTimeUseCase) Execute(ctx *gin.Context) {
 		Folio:                  showDB.Folio,
 		StartDate:              showDB.StartDate.Format("2006-01-02 15:04:05"),
 		EndDate:                showDB.EndDate.Format("2006-01-02 15:04:05"),
-		AvailableQuantitySeats: showDB.AvailableQuantitySeats,
+		AvailableQuantitySeats: showDB.QuantitySeats - *showDB.UnavailableSeats,
 		UnavailableSeats:       showDB.UnavailableSeats,
 		Movie: dto.MovieResponse{
 			ID:          showDB.Movie.ID,

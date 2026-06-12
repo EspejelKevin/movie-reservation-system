@@ -37,7 +37,7 @@ func (usecase *GetShowTimesUseCase) mapShows(shows []entities.ShowTime) []dto.Sh
 			Folio:                  show.Folio,
 			StartDate:              show.StartDate.Format("2006-01-02 15:04:05"),
 			EndDate:                show.EndDate.Format("2006-01-02 15:04:05"),
-			AvailableQuantitySeats: show.AvailableQuantitySeats,
+			AvailableQuantitySeats: show.QuantitySeats - *show.UnavailableSeats,
 			UnavailableSeats:       show.UnavailableSeats,
 			Movie: dto.MovieResponse{
 				ID:          show.Movie.ID,

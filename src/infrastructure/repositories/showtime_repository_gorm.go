@@ -49,7 +49,7 @@ func (repository *ShowTimeRepositoryGorm) Update(ctx context.Context, id uint, s
 	endDate, _ := time.Parse("2006-01-02 15:04:05", show.EndDate)
 	return gorm.G[entities.ShowTime](db).Where("id = ?", id).Updates(ctx, entities.ShowTime{Folio: show.Folio,
 		StartDate: startDate, EndDate: endDate,
-		AvailableQuantitySeats: show.AvailableQuantitySeats, MovieID: show.MovieID})
+		QuantitySeats: show.QuantitySeats, MovieID: show.MovieID})
 }
 
 func (repository *ShowTimeRepositoryGorm) Delete(ctx context.Context, id uint) (int, error) {
