@@ -10,6 +10,7 @@ type UserDTO struct {
 }
 
 type UserResponse struct {
+	ID       uint   `json:"id,omitempty"`
 	Name     string `json:"name"`
 	UserName string `json:"username"`
 	Email    string `json:"email"`
