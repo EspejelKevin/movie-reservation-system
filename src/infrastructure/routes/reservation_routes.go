@@ -8,25 +8,33 @@ import (
 )
 
 type RouterReservation struct {
-	getReservation  *reservation.GetReservationUseCase
-	saveReservation *reservation.SaveReservationUseCase
+	getReservationUser *reservation.GetReservationUserUseCase
+	getReservation     *reservation.GetReservationUseCase
+	saveReservation    *reservation.SaveReservationUseCase
+	cancelReservation  *reservation.CancelReservationUseCase
 
 	middlewares *middlewares.Middlewares
 }
 
-func NewRouterReservation(getReservation *reservation.GetReservationUseCase,
+func NewRouterReservation(getReservationUser *reservation.GetReservationUserUseCase,
+	getReservation *reservation.GetReservationUseCase,
 	saveReservation *reservation.SaveReservationUseCase,
+	cancelReservation *reservation.CancelReservationUseCase,
 	middlewares *middlewares.Middlewares) *RouterReservation {
-	return &RouterReservation{getReservation, saveReservation, middlewares}
+	return &RouterReservation{getReservationUser, getReservation, saveReservation, cancelReservation, middlewares}
 }
 
 func (router *RouterReservation) RegisterRoutesReservation(engine *gin.Engine) {
 	reservation := engine.Group("/api/v1")
 	reservation.Use(router.middlewares.Authentication())
 	{
-		reservation.GET("/reservation/:id", router.middlewares.Authorization("ADMIN"),
+		reservation.GET("/me/reservations", router.middlewares.Authorization("ADMIN", "REGULAR_USER"),
+			router.getReservationUser.Execute)
+		reservation.GET("/reservations/:id", router.middlewares.Authorization("ADMIN"),
 			router.getReservation.Execute)
-		reservation.POST("/reservation", router.middlewares.Authorization("ADMIN", "REGULAR_USER"),
+		reservation.POST("/reservations", router.middlewares.Authorization("ADMIN", "REGULAR_USER"),
 			router.saveReservation.Execute)
+		reservation.PUT("/reservations/:id/cancel", router.middlewares.Authorization("ADMIN", "REGULAR_USER"),
+			router.cancelReservation.Execute)
 	}
 }
