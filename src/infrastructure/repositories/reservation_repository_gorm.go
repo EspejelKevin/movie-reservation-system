@@ -44,3 +44,16 @@ func (repository *ReservationRepositoryGorm) GetReservationsByUserID(ctx context
 		Preload("User", nil).
 		Where("user_id = ?", userID).Find(ctx)
 }
+
+func (repository *ReservationRepositoryGorm) GetReservationByIDAndUserID(ctx context.Context, id uint, userID uint) (entities.Reservation, error) {
+	db := repository.connection.GetDB()
+	return gorm.G[entities.Reservation](db).
+		Preload("ShowTime.Movie.Genre", nil).
+		Preload("User", nil).
+		Where("id = ? and user_id = ?", id, userID).First(ctx)
+}
+
+func (repository *ReservationRepositoryGorm) UpdateReservationStatus(ctx context.Context, id uint, userID uint, status string) (int, error) {
+	db := repository.connection.GetDB()
+	return gorm.G[entities.Reservation](db).Where("id = ? and user_id = ?", id, userID).Update(ctx, "status", status)
+}

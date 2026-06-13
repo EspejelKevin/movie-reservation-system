@@ -10,4 +10,6 @@ type ReservationRepository interface {
 	GetReservationByID(ctx context.Context, id uint) (entities.Reservation, error)
 	GetReservationByFolio(ctx context.Context, folio string) (entities.Reservation, error)
 	GetReservationsByUserID(ctx context.Context, userID uint) ([]entities.Reservation, error)
+	GetReservationByIDAndUserID(ctx context.Context, id uint, userID uint) (entities.Reservation, error)
+	UpdateReservationStatus(ctx context.Context, id uint, userID uint, status string) (int, error)
 }
