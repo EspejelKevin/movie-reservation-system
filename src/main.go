@@ -84,10 +84,12 @@ func main() {
 	updateShow := showtime.NewUpdateShowTimeUseCase(showtimeRepository, validate)
 	deleteShow := showtime.NewDeleteShowTimeUseCase(showtimeRepository)
 
+	getReservations := reservation.NewGetReservationsUseCase(reservationRepository)
 	getReservationUser := reservation.NewGetReservationUserUseCase(reservationRepository)
 	getReservation := reservation.NewGetReservationUseCase(reservationRepository)
 	saveReservation := reservation.NewSaveReservationUseCase(reservationRepository, showtimeRepository, validate)
 	cancelReservation := reservation.NewCancelReservationUseCase(reservationRepository)
+	deleteReservation := reservation.NewDeleteReservationUseCase(reservationRepository, showtimeRepository)
 
 	middlewares := middlewares.NewMiddlewares(settings)
 
@@ -97,8 +99,8 @@ func main() {
 	routerGenre := routes.NewRouterGenre(getGenres, getGenre, saveGenre, updateGenre, deleteGenre, middlewares)
 	routerMovie := routes.NewRouterMovie(getMovie, getMovies, saveMovie, updateImage, updateMovie, deleteMovie, middlewares)
 	routerShowTime := routes.NewRouterShowTime(getShow, getShows, saveShow, updateShow, deleteShow, middlewares)
-	routerReservation := routes.NewRouterReservation(getReservationUser, getReservation,
-		saveReservation, cancelReservation, middlewares)
+	routerReservation := routes.NewRouterReservation(getReservations, getReservationUser, getReservation,
+		saveReservation, cancelReservation, deleteReservation, middlewares)
 
 	engine := gin.Default()
 	routerAdmin.RegisterRoutesAdmin(engine)

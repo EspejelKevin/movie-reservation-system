@@ -7,9 +7,11 @@ import (
 
 type ReservationRepository interface {
 	Save(ctx context.Context, reservation entities.Reservation) error
+	GetReservations(ctx context.Context) ([]entities.Reservation, error)
 	GetReservationByID(ctx context.Context, id uint) (entities.Reservation, error)
 	GetReservationByFolio(ctx context.Context, folio string) (entities.Reservation, error)
 	GetReservationsByUserID(ctx context.Context, userID uint) ([]entities.Reservation, error)
 	GetReservationByIDAndUserID(ctx context.Context, id uint, userID uint) (entities.Reservation, error)
 	UpdateReservationStatus(ctx context.Context, id uint, userID uint, status string) (int, error)
+	Delete(ctx context.Context, id uint) (int, error)
 }

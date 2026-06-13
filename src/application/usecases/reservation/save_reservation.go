@@ -84,9 +84,10 @@ func (usecase *SaveReservationUseCase) Execute(ctx *gin.Context) {
 	}
 
 	newReservation := entities.Reservation{
-		Folio:      reservationDTO.Folio,
-		ShowTimeID: reservationDTO.ShowTimeID,
-		UserID:     uint(userID),
+		Folio:         reservationDTO.Folio,
+		ReservedSeats: reservationDTO.ReservedSeats,
+		ShowTimeID:    reservationDTO.ShowTimeID,
+		UserID:        uint(userID),
 	}
 
 	if err := usecase.reservationRepo.Save(ctx.Request.Context(), newReservation); err != nil {

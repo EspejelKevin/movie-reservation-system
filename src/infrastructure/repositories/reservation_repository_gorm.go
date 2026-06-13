@@ -21,6 +21,13 @@ func (repository *ReservationRepositoryGorm) Save(ctx context.Context, reservati
 	return gorm.G[entities.Reservation](db).Create(ctx, &reservation)
 }
 
+func (repository *ReservationRepositoryGorm) GetReservations(ctx context.Context) ([]entities.Reservation, error) {
+	db := repository.connection.GetDB()
+	return gorm.G[entities.Reservation](db).
+		Preload("ShowTime.Movie.Genre", nil).
+		Preload("User", nil).Find(ctx)
+}
+
 func (repository *ReservationRepositoryGorm) GetReservationByID(ctx context.Context, id uint) (entities.Reservation, error) {
 	db := repository.connection.GetDB()
 	return gorm.G[entities.Reservation](db).
@@ -56,4 +63,9 @@ func (repository *ReservationRepositoryGorm) GetReservationByIDAndUserID(ctx con
 func (repository *ReservationRepositoryGorm) UpdateReservationStatus(ctx context.Context, id uint, userID uint, status string) (int, error) {
 	db := repository.connection.GetDB()
 	return gorm.G[entities.Reservation](db).Where("id = ? and user_id = ?", id, userID).Update(ctx, "status", status)
+}
+
+func (repository *ReservationRepositoryGorm) Delete(ctx context.Context, id uint) (int, error) {
+	db := repository.connection.GetDB()
+	return gorm.G[entities.Reservation](db).Where("id = ?", id).Delete(ctx)
 }
