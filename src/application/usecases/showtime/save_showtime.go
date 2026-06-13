@@ -65,6 +65,7 @@ func (usecase *SaveShowTimeUseCase) Execute(ctx *gin.Context) {
 }
 
 func (usecase *SaveShowTimeUseCase) toTime(date string) time.Time {
-	time, _ := time.Parse("2006-01-02 15:04:05", date)
-	return time
+	loc, _ := time.LoadLocation("America/Mexico_City")
+	time, _ := time.ParseInLocation("2006-01-02 15:04:05", date, loc)
+	return time.UTC()
 }
