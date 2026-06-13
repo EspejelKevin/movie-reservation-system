@@ -58,6 +58,7 @@ func (usecase *GetReservationUseCase) Execute(ctx *gin.Context) {
 			},
 		},
 		User: dto.UserResponse{
+			ID:       reservationDB.UserID,
 			Name:     reservationDB.User.Name,
 			UserName: reservationDB.User.Email,
 			Email:    reservationDB.User.Email,
